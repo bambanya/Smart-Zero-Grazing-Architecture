@@ -98,3 +98,12 @@ if (pumpRunning && (millis() - pumpStartTime >= MAX_PUMP_RUN_TIME)) {
   }
 }
 ```
+## ⚖️ Engineering Trade-Offs & Production Roadmap
+
+Every architectural decision in the `v1.0.0` field prototype balanced immediate rural deployment viability against unit cost (~KES 8,030 / ~$60 USD). Below are the primary engineering trade-offs made during prototyping and their planned upgrades for commercial production:
+
+| Design Dimension | Prototype Implementation (`v1.0.0`) | Engineering Trade-Off & Limitation | Commercial Production Upgrade (`v2.0`) |
+| :--- | :--- | :--- | :--- |
+| **Wide-Area Connectivity** | **SIM800L (2G GSM/GPRS)** | Selected for ultra-low module cost and ubiquitous rural base-station coverage across Kenya, where 2G still anchors rural voice/SMS infrastructure. However, 2G requires high instantaneous current spikes (`2.0A`) and faces a regional GSMA phase-out roadmap toward 2030 as operators refarm spectrum to 4G/5G. | Migrate to **LPWAN** (**NB-IoT / LTE-M** via SIM7080G) for cellular deployments or **LoRaWAN** (`868 MHz`) for multi-barn farm clusters to slash peak current draw by >80% and future-proof connectivity. |
+| **Circuit Integration & Enclosure** | **Perfboard + Modular Housing** | Rapidly validated physical sensor geometry, ultrasonic tank clearances, and thermal isolation using accessible, low-cost enclosures. Exposed jumper interconnects and non-sealed housings are vulnerable to moisture, ammonia corrosion, and mechanical vibration in active zero-grazing sheds. | Consolidate all subsystems onto a **2-layer custom KiCad PCB** with a solid ground plane, SMD decoupling, and 5.08mm screw terminals housed inside a weatherproof **IP65-rated polycarbonate enclosure**. |
+| **Telemetry Transport** | **Direct HTTPS to Google Apps Script** | Eliminated recurring cloud server costs and enabled instant 8-column spreadsheet analytics for small-scale farmers. HTTPS TLS handshakes consume significant ESP32 RAM and bandwidth over GPRS compared to lightweight binary payloads. | Implement an **MQTT broker** architecture with local flash-memory ring buffering so zero sensor readings are lost during temporary network blackouts. |
