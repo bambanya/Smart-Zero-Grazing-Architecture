@@ -11,10 +11,9 @@
 
 ## 📖 Project Overview
 The **Smart Zero Grazing System** is an autonomous, fault-tolerant Cyber-Physical System (CPS) engineered for precision livestock farming. Traditional automated agricultural systems deployed in rural areas frequently suffer from catastrophic hardware failures due to power grid instability, dry-running pumps, and inductive electrical noise. 
+<img width="2976" height="3968" alt="side view" src="https://github.com/user-attachments/assets/7a0b0337-9048-499d-b9b6-56a51176bc7b" />
 
 This architecture solves these electromechanical vulnerabilities by bridging an ESP32 edge-controller with a robust hardware-interlocked network. It transitions farming from broad, herd-level estimations to precise, individual-level automated management, tracking climate, fluid levels, feed mass, and individual cattle attendance via RFID.
-<img width="2976" height="3968" alt="IMG_20260520_135137_365@-1710966157" src="https://github.com/user-attachments/assets/dbadac73-9613-428a-95ec-b6dc01028651" />
-
 
 
 ## ⚡ Core Engineering Features & Fault Tolerance
@@ -45,9 +44,10 @@ To prevent the collapsing magnetic field of the DC motor from welding the relay 
 The system provides operators with both immediate on-site diagnostics and long-term remote analytics.
 
 * **On-Site Dynamic UI:** A 16x2 I2C LCD operates in a 3-state carousel, displaying standard fluid levels, individual cattle ID scans, and immediately overriding to a high-priority `"ERR: PUMP DRY!"` or `"WARNING: SEWER FULL!"` visual and SMS alert when hardware intervention is required.
-* **Remote Cloud Database:** Bypassing third-party servers, the ESP32 executes secure HTTPS GET/POST requests to a custom Google Apps Script. Telemetry is parsed into an 8-column Google Sheet (Date, Time, Temp, Humidity, Water Depth, Sewer Depth, Tag ID, Feed Mass) for continuous data logging.
+  <img width="1080" height="2400" alt="mobile dashboard" src="https://github.com/user-attachments/assets/ac57e0a3-f3b5-4a5a-b4f7-e13f89327599" />
 
----
+* **Remote Cloud Database:** Bypassing third-party servers, the ESP32 executes secure HTTPS GET/POST requests to a custom Google Apps Script. Telemetry is parsed into an 8-column Google Sheet (Date, Time, Temp, Humidity, Water Depth, Sewer Depth, Tag ID, Feed Mass) for continuous data logging.
+<img width="1080" height="728" alt="sheets telemetry" src="https://github.com/user-attachments/assets/4c57be10-5c34-4bea-a5ff-da23862ce2db" />
 
 ## 🧰 Primary Bill of Materials (BOM)
 * **Microcontroller:** ESP32 DevKit V1
@@ -57,7 +57,7 @@ The system provides operators with both immediate on-site diagnostics and long-t
 * **Actuators:** 12V DC Water Pump, MG996R High-Torque PWM Micro Servo
 * **Power Regulation:** LM2596 Buck Converter, TIP120, Opto-isolated 5V Relay
 
----
+
 
 ## 🚀 Setup & Execution
 
