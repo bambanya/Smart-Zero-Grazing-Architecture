@@ -66,6 +66,22 @@ The system provides operators with both immediate on-site diagnostics and long-t
 3. **Calibration:** The load cell firmware contains an inverted calibration scalar (`-100.0`) to account for specific physical strain-gauge mounting. Adjust this based on your specific HX711 hardware setup.
 4. **Cloud Hook:** Insert your specific Google Apps Script Web App URL and local Wi-Fi credentials into the ESP32 header definitions before flashing.
 
+## 🔌 ESP32 Pinout & Hardware Interface Map
+
+To prevent boot-mode conflicts on ESP32 strapping pins (`GPIO 0`, `2`, `12`, `15`) and isolate high-current inductive loads from sensitive communication buses, peripheral interfaces are partitioned across dedicated GPIO domains:
+
+| Subsystem / Module | Function | Protocol / Signal | ESP32 GPIO | Power Domain | Hardware Protection / Notes |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **16x2 Character LCD** | On-site 3-state UI | I2C (`SDA` / `SCL`) | `GPIO 21` / `GPIO 22` | `5.0V` | Localized decoupling cap + 500ms EMI blanking delay |
+| **MFRC522 RFID** | Cattle ID tracking | SPI (`SDA/SS`, `SCK`, `MOSI`, `MISO`, `RST`) | `GPIO 5`, `18`, `23`, `19`, `27` | `3.3V` | 3-second SPI register heartbeat re-initialization |
+| **SIM800L GSM** | SMS alerts & GPRS | UART (`TX` / `RX`) | `GPIO 16` (`RX2`) / `GPIO 17` (`TX2`) | `4.0V` (Isolated) | Dedicated LM2596 buck converter + 470µF bulk cap |
+| **HX711 Load Cell** | 5kg feed trough mass | 2-Wire Serial (`DT` / `SCK`) | `GPIO 32` / `GPIO 33` | `3.3V` | Inverted calibration scalar (`-100.0`) for strain gauge |
+| **HC-SR04 (Primary)** | Clean water level | Digital (`TRIG` / `ECHO`) | `GPIO 13` / `GPIO 14` | `5.0V` | Triggers 3-second dry-run watchdog cutoff at `5.0 cm` |
+| **HC-SR04 (Waste)** | Sewer tank depth | Digital (`TRIG` / `ECHO`) | `GPIO 25` / `GPIO 34` | `5.0V` | `GPIO 34` is input-only; triggers `"SEWER FULL"` alert |
+| **DHT11 Sensor** | Ambient temp/humidity | 1-Wire Digital | `GPIO 4` | `3.3V` | 10kΩ pull-up resistor on data line |
+| **MG996R Servo** | Feed hopper gate | 50Hz PWM | `GPIO 15` | `5.0V` | Software-throttled sweep to prevent current surge |
+| **12V Water Pump** | Trough refill actuation | Active-HIGH Logic | `GPIO 26` | `12.0V` (Switched) | TIP120 Darlington firewall + opto-relay + 1N4007 flyback |
+
 
 ## 💻 Key Firmware Implementation: 3-Second Dry-Run Watchdog
 
