@@ -9,14 +9,14 @@
 **Institution:** Masinde Muliro University of Science and Technology (MMUST)  
 **Location:** Kenya
 
-## 📖 Project Overview
-The **Smart Zero Grazing System** is an autonomous, fault-tolerant Cyber-Physical System (CPS) engineered for precision livestock farming. Traditional automated agricultural systems deployed in rural areas frequently suffer from catastrophic hardware failures due to power grid instability, dry-running pumps, and inductive electrical noise. 
+##  Project Overview
+The **Smart Zero Grazing System** is an autonomous, fault-tolerant System engineered for precision livestock farming. Traditional automated agricultural systems deployed in rural areas frequently suffer from catastrophic hardware failures due to power grid instability, dry-running pumps, and inductive electrical noise. 
 <img width="2976" height="3968" alt="side view" src="https://github.com/user-attachments/assets/7a0b0337-9048-499d-b9b6-56a51176bc7b" />
 
 This architecture solves these electromechanical vulnerabilities by bridging an ESP32 edge-controller with a robust hardware-interlocked network. It transitions farming from broad, herd-level estimations to precise, individual-level automated management, tracking climate, fluid levels, feed mass, and individual cattle attendance via RFID.
 
 
-## ⚡ Core Engineering Features & Fault Tolerance
+##  Core Engineering Features & Fault Tolerance
 
 This system was specifically designed to survive harsh electrical and environmental conditions through strict software algorithms and hardware isolation.
 
@@ -39,7 +39,7 @@ To prevent the collapsing magnetic field of the DC motor from welding the relay 
 
 
 
-## 📡 Dual-Path Telemetry Architecture
+##  Dual-Path Telemetry Architecture
 
 The system provides operators with both immediate on-site diagnostics and long-term remote analytics.
 
@@ -49,7 +49,7 @@ The system provides operators with both immediate on-site diagnostics and long-t
 * **Remote Cloud Database:** Bypassing third-party servers, the ESP32 executes secure HTTPS GET/POST requests to a custom Google Apps Script. Telemetry is parsed into an 8-column Google Sheet (Date, Time, Temp, Humidity, Water Depth, Sewer Depth, Tag ID, Feed Mass) for continuous data logging.
 <img width="1080" height="728" alt="sheets telemetry" src="https://github.com/user-attachments/assets/4c57be10-5c34-4bea-a5ff-da23862ce2db" />
 
-## 🧰 Primary Bill of Materials (BOM)
+##  Primary Bill of Materials (BOM)
 * **Microcontroller:** ESP32 DevKit V1
 * **Connectivity:** SIM800L GSM/GPRS Module (Custom 8.3cm $\lambda/4$ tuned antenna)
 * **Identification:** MFRC522 13.56 MHz RFID Reader
@@ -59,14 +59,14 @@ The system provides operators with both immediate on-site diagnostics and long-t
 
 
 
-## 🚀 Setup & Execution
+##  Setup & Execution
 
 1. **Hardware Assembly:** Wire the components strictly according to the `/assets/circuit_diagram.png` schematic. Ensure the LM2596 is tuned to 4.0V *before* connecting the SIM800L.
 2. **Dependencies:** Install `MFRC522.h`, `HX711.h`, and `LiquidCrystal_I2C.h` via the Arduino Library Manager.
 3. **Calibration:** The load cell firmware contains an inverted calibration scalar (`-100.0`) to account for specific physical strain-gauge mounting. Adjust this based on your specific HX711 hardware setup.
 4. **Cloud Hook:** Insert your specific Google Apps Script Web App URL and local Wi-Fi credentials into the ESP32 header definitions before flashing.
 
-## 🔌 ESP32 Pinout & Hardware Interface Map
+## ESP32 Pinout & Hardware Interface Map
 
 To prevent boot-mode conflicts on ESP32 strapping pins (`GPIO 0`, `2`, `12`, `15`) and isolate high-current inductive loads from sensitive communication buses, peripheral interfaces are partitioned across dedicated GPIO domains:
 
@@ -83,7 +83,7 @@ To prevent boot-mode conflicts on ESP32 strapping pins (`GPIO 0`, `2`, `12`, `15
 | **12V Water Pump** | Trough refill actuation | Active-HIGH Logic | `GPIO 26` | `12.0V` (Switched) | TIP120 Darlington firewall + opto-relay + 1N4007 flyback |
 
 
-## 💻 Key Firmware Implementation: 3-Second Dry-Run Watchdog
+## Key Firmware Implementation: 3-Second Dry-Run Watchdog
 
 To prevent thermal runaway and pump destruction when the source water tank empties, the firmware enforces a strict non-blocking hardware watchdog timer:
 
@@ -98,7 +98,7 @@ if (pumpRunning && (millis() - pumpStartTime >= MAX_PUMP_RUN_TIME)) {
   }
 }
 ```
-## ⚖️ Engineering Trade-Offs & Production Roadmap
+##  Engineering Trade-Offs & Production Roadmap
 
 Every architectural decision in the `v1.0.0` field prototype balanced immediate rural deployment viability against unit cost (~KES 8,030 / ~$60 USD). Below are the primary engineering trade-offs made during prototyping and their planned upgrades for commercial production:
 
