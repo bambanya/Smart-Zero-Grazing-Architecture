@@ -65,3 +65,20 @@ The system provides operators with both immediate on-site diagnostics and long-t
 2. **Dependencies:** Install `MFRC522.h`, `HX711.h`, and `LiquidCrystal_I2C.h` via the Arduino Library Manager.
 3. **Calibration:** The load cell firmware contains an inverted calibration scalar (`-100.0`) to account for specific physical strain-gauge mounting. Adjust this based on your specific HX711 hardware setup.
 4. **Cloud Hook:** Insert your specific Google Apps Script Web App URL and local Wi-Fi credentials into the ESP32 header definitions before flashing.
+
+
+## 💻 Key Firmware Implementation: 3-Second Dry-Run Watchdog
+
+To prevent thermal runaway and pump destruction when the source water tank empties, the firmware enforces a strict non-blocking hardware watchdog timer:
+
+```cpp
+// Algorithmic Dry-Run Protection (3000ms Watchdog)
+if (pumpRunning && (millis() - pumpStartTime >= MAX_PUMP_RUN_TIME)) {
+  if (waterDistance > WATER_FULL_THRESHOLD) {
+    digitalWrite(RELAY_PIN, LOW);        // Immediately cut power via TIP120 firewall
+    pumpRunning = false;
+    systemErrorState = ERR_PUMP_DRY;     // Lock UI and trigger LCD carousel override
+    sendEmergencySMS("ALERT: Source tank dry. Pump locked out.");
+  }
+}
+```
